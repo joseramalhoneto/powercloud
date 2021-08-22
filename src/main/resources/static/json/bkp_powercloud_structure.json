@@ -1,0 +1,30 @@
+[
+	{
+		"id": "01",
+		"name": "CRM & Service",
+		"description": "A technology for managing all your company's relationships and interactions with customers",
+		"color": "orange",
+		"subareas": [
+			{ "id": "1001", "name": "Customer Self Service", "revenue": 50.000, "employees": 25 },
+			{ "id": "1002", "name": "Price Adjustments", "revenue": 40.000, "employees": 8 },
+			{ "id": "1003", "name": "360 Agent View", "revenue": 10.000, "employees": 10  },
+			{ "id": "1004", "name": "Work Item Manager", "revenue": 5.000, "employees": 15 },
+			{ "id": "1005", "name": "Service Manager", "revenue": 15.000, "employees": 18 },
+			{ "id": "1006", "name": "Contract Manager", "revenue": 20.000, "employees": 9 },
+			{ "id": "1007", "name": "Contact Manager", "revenue": 10.000, "employees": 3 }
+		]
+	},
+	{
+		"id": "02",
+		"name": "MDM/EDM",
+		"description": "The highest security standard for managing mobile",
+		"color": "light_blue",
+		"subareas": [
+			{ "id": "2001", "name": "B2C, B2B, Smart Meters", "revenue": 10.000, "employees": 13 },
+			{ "id": "2002", "name": "Validation & Estimation", "revenue": 13.000, "employees": 17 },
+			{ "id": "2003", "name": "Agregation & Disagregation", "revenue": 20.000, "employees": 9 },
+			{ "id": "2004", "name": "Abuse & Warning", "revenue": 50.000, "employees": 10 },
+			{ "id": "2005", "name": "Forecast", "revenue": 30.000, "employees": 7 }
+		]
+	}
+]
