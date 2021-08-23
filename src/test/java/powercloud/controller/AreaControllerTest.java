@@ -1,6 +1,7 @@
 package powercloud.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import powercloud.model.Area;
-import powercloud.model.SubArea;
 import powercloud.service.AreaService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,8 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AreaController.class)
 class AreaControllerTest {
 
-    private SubArea subArea, subArea2;
-    private List<SubArea> subareas;
     private Area area, area2;
 
     @Autowired
@@ -39,31 +36,14 @@ class AreaControllerTest {
     @MockBean
     private AreaService service;
 
-    public AreaControllerTest() {
-        subArea  = new SubArea();
-        subArea2 = new SubArea();
-        subareas = new ArrayList<>();
-        area  = new Area();
-        area2  = new Area();
-    }
-
-    public void setSubareas() {
-        subArea  = new SubArea(200L, "Contact Manager Test 1", 9000, 14);
-        subArea2 = new SubArea(201L, "Contact Manager Test 2", 15000, 9);
-        subareas.add(subArea);
-        subareas.add(subArea2);
-    }
-
-    public void setArea() {
-        area  = new Area(100L, "name_area_test", "description_test", "color_test", subareas);
+    @BeforeEach
+    void setUp() {
+        area  = new Area(100L, "name_area_test", "description_test", "color_test");
+        area2 = new Area(200L, "name_area_test", "description_test", "color_test");
     }
 
     @Test
     void findAll() throws Exception {
-        setSubareas();
-        area  = new Area(100L, "name_area_test", "description_test", "color_test", subareas);
-        area2 = new Area(200L, "name_area_test 2", "description_test 2", "color_test 2", subareas);
-
         when(service
                 .findAll())
                 .thenReturn(List.of(area, area2));
@@ -79,9 +59,6 @@ class AreaControllerTest {
 
     @Test
     void findById() throws Exception {
-        setSubareas();
-        setArea();
-
         when(service
                 .findById(100L))
                 .thenReturn(area);
@@ -96,25 +73,11 @@ class AreaControllerTest {
 
     @Test
     void findByIdInvalid() throws Exception {
-        setSubareas();
-        setArea();
 
-        when(service
-                .findById(999L))
-                .thenReturn(area);
-
-        this.mockMvc
-                .perform(MockMvcRequestBuilders.get("/area/{id}", 999L))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-//                .andExpect(jsonPath("$.id").value(100L))
-//                .andExpect(jsonPath("$.name").value("name_area_test"));
     }
 
     @Test
     void findByIdNotFound() throws Exception {
-        setSubareas();
-        setArea();
         service.save(area);
 
         service.deleteById(area.getId());
@@ -124,9 +87,6 @@ class AreaControllerTest {
 
     @Test
     void save() throws Exception {
-        setSubareas();
-        setArea();
-
         when(service.save(any()))
                 .thenReturn(area);
 
@@ -143,9 +103,6 @@ class AreaControllerTest {
 
     @Test
     void update()  throws Exception {
-        setSubareas();
-        area = new Area(100L, "new_name_area", "new_description_test", "new_color_test", subareas);
-
         when(service.update(any()))
                 .thenReturn(area);
 
@@ -156,15 +113,12 @@ class AreaControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(100L))
-                .andExpect(jsonPath("$.name").value("new_name_area"))
-                .andExpect(jsonPath("$.description").value("new_description_test"));
+                .andExpect(jsonPath("$.name").value("name_area_test"))
+                .andExpect(jsonPath("$.description").value("description_test"));
     }
 
     @Test
     void deleteById() throws Exception {
-        setSubareas();
-        setArea();
-
         when(service.save(any()))
                 .thenReturn(area);
 
@@ -175,11 +129,4 @@ class AreaControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void getMaxRevenue() {
-    }
-
-    @Test
-    void getMinRevenue() {
-    }
 }

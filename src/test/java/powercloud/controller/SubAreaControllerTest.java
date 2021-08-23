@@ -1,6 +1,7 @@
 package powercloud.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +35,14 @@ class SubAreaControllerTest {
     @MockBean
     private SubAreaService service;
 
-    public SubAreaControllerTest() {
-        this.subArea = new SubArea();
-        this.subArea2 = new SubArea();
+    @BeforeEach
+    void setUp() {
+        this.subArea =  new SubArea(100L, "Contact Manager Test 1", 9000, 14);
+        this.subArea2 = new SubArea(200L, "Contact Manager Test 2", 16000, 5);
     }
 
     @Test
     void findAll() throws Exception {
-        subArea  = new SubArea(100L, "Contact Manager Test 1", 9000, 14);
-        subArea2  = new SubArea(200L, "Contact Manager Test 2", 16000, 5);
-
         when(service
                 .findAll())
                 .thenReturn(List.of(subArea, subArea2));
@@ -59,8 +58,6 @@ class SubAreaControllerTest {
 
     @Test
     void findById() throws Exception {
-        subArea  = new SubArea(100L, "Contact Manager Test 1", 9000, 14);
-
         when(service
                 .findById(100L))
                 .thenReturn(subArea);
@@ -75,8 +72,6 @@ class SubAreaControllerTest {
 
     @Test
     void save() throws Exception {
-        subArea  = new SubArea(100L, "Contact Manager Test 1", 9000, 14);
-
         when(service.save(any()))
                 .thenReturn(subArea);
 
@@ -94,8 +89,6 @@ class SubAreaControllerTest {
 
     @Test
     void update()  throws Exception {
-        subArea  = new SubArea(100L, "Contact Manager Test 1", 9000, 14);
-
         when(service.update(any()))
                 .thenReturn(subArea);
 
@@ -113,8 +106,6 @@ class SubAreaControllerTest {
 
     @Test
     void deleteById()   throws Exception {
-        subArea  = new SubArea(100L, "Contact Manager Test 1", 9000, 14);
-
         when(service.save(any()))
                 .thenReturn(subArea);
 
@@ -125,11 +116,4 @@ class SubAreaControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void getMaxRevenue() {
-    }
-
-    @Test
-    void getMinRevenue() {
-    }
 }

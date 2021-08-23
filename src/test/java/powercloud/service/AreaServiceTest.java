@@ -1,77 +1,127 @@
 package powercloud.service;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import powercloud.exception.AreaInvalidException;
+import powercloud.exception.AreaNotFoundException;
 import powercloud.model.Area;
 import powercloud.model.SubArea;
 import powercloud.repository.AreaRepository;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 class AreaServiceTest {
 
-    private SubArea subArea, subArea2;
-    private List<SubArea> subareas;
     private Area area, area2;
 
-    @Autowired
+    @Mock
+    private AreaRepository repository;
     private AreaService service;
 
-    @Autowired
-    private AreaRepository repository;
-
-    public AreaServiceTest() {
-        subArea  = new SubArea();
-        subArea2 = new SubArea();
-        subareas = new ArrayList<>();
-        area  = new Area();
-        area2  = new Area();
-    }
-
-    public void setSubareas() {
-        subArea  = new SubArea(200L, "Contact Manager Test 1", 9000, 14);
-        subArea2 = new SubArea(201L, "Contact Manager Test 2", 15000, 9);
-        subareas.add(subArea);
-        subareas.add(subArea2);
-    }
-
-    public void setArea() {
-        area  = new Area(100L, "name_area_test", "description_test", "color_test", subareas);
-    }
-
-    @Test
-    void findAll() {
-    }
-
-    @Test
-    void findById() {
-        setSubareas();
-        setArea();
-        repository.save(area);
-
-        Optional<Area> areaResult = repository.findById(100L);
-        assertEquals(true, areaResult.isPresent());
-        assertEquals(100L, areaResult.get().getId());
+    @BeforeEach
+    void setUp() {
+        service = new AreaService(repository);
+        area  = new Area(100L, "name_area_test", "description_test", "color_test");
+        area2 = new Area(200L, "name_area_test", "description_test", "color_test");
     }
 
     @Test
     void save() {
-        setSubareas();
-        setArea();
-        repository.save(area);
+        service.save(area);
 
-        boolean exists = repository.existsById(100L);
-        assertEquals(true, exists);
+        ArgumentCaptor<Area> argumentCaptor = ArgumentCaptor.forClass(Area.class);
+        verify(repository).save(argumentCaptor.capture());
+        Area result = argumentCaptor.getValue();
+
+        assertThat(result).isEqualTo(area);
+    }
+
+    @Test
+    void findById() {
+        when(repository.findById(100L)).thenReturn(Optional.of(area));
+        assertThat(service.findById(100L)).isEqualTo(area);
+    }
+
+    @Test
+    void whenAreaAlreadyExists() {
+
+    }
+
+    @Test
+    void whenAreaIsNull() {
+        area  = null;
+        Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
+
+        String expectedMessage = "Area invalid.";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void whenAreaNameIsInvalid() {
+        area  = new Area(100L, "", "description_test", "color_test");
+        Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
+
+        String expectedMessage = "Area invalid.";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void whenAreaDescriptionIsInvalid() {
+        area  = new Area(100L, "name_area_test", "", "color_test");
+        Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
+
+        String expectedMessage = "Area invalid.";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void whenAreaColorIsInvalid() {
+        area  = new Area(100L, "name_area_test", "description_test", "");
+        Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
+
+        String expectedMessage = "Area invalid.";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void updateAreaIdDoesNotExist() {
+        area  = new Area(999L, "name_area_test", "description_test", "color_test");
+        Exception exception = assertThrows(AreaNotFoundException.class, () -> service.update(area));
+
+        String expectedMessage = "Area not found.";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void deleteAreaIdDoesNotExist() {
+        Exception exception = assertThrows(AreaNotFoundException.class, () -> service.deleteById(999L));
+
+        String expectedMessage = "Area not found.";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
@@ -80,49 +130,28 @@ class AreaServiceTest {
 
     @Test
     void saveAll() {
-        setSubareas();
-        area  = new Area(100L, "name_area_test", "description_test", "color_test", subareas);
-        area2 = new Area(200L, "name_area_test 2", "description_test 2", "color_test 2", subareas);
         service.saveAll(List.of(area, area2));
 
-        boolean exists = repository.existsById(100L);
-        assertEquals(true, exists);
+        ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
+        verify(repository).saveAll(argumentCaptor.capture());
+        List result = argumentCaptor.getValue();
 
-        exists = repository.existsById(200L);
-        assertEquals(true, exists);
+        assertThat(result).isEqualTo(List.of(area, area2));
     }
 
     @Test
     void deleteAll() {
-        setSubareas();
-        area  = new Area(100L, "name_area_test", "description_test", "color_test", subareas);
-        area2 = new Area(200L, "name_area_test 2", "description_test 2", "color_test 2", subareas);
         service.saveAll(List.of(area, area2));
 
         service.deleteAll();
         boolean exists = repository.existsById(100L);
-        assertEquals(false, exists);
+        assertFalse(exists);
 
         exists = repository.existsById(200L);
-        assertEquals(false, exists);
+        assertFalse(exists);
     }
 
     @Test
-    void deleteById() {
-        setSubareas();
-        setArea();
-        service.save(area);
+    void deleteById() {}
 
-        service.deleteById(area.getId());
-        boolean exists = repository.existsById(100L);
-        assertEquals(false, exists);
-    }
-
-    @Test
-    void getMaxRevenue() {
-    }
-
-    @Test
-    void getMinRevenue() {
-    }
 }

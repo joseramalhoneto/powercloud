@@ -24,4 +24,11 @@ public class Area {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "area_id")
     private List<SubArea> subareas;
+
+    public Area(Long id, String name, String description, String color) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.color = color;
+    }
 }

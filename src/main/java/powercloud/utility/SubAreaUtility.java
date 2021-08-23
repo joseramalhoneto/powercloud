@@ -11,7 +11,7 @@ public class SubAreaUtility {
         if(subArea.getId() == null ||
                 subArea.getId() < 1 ||
                 subArea.getName().equals("") ||
-                subArea.getEmployees() > 0)
+                subArea.getEmployees() < 0)
             return false;
 
         return true;
