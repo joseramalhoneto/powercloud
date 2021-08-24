@@ -48,7 +48,7 @@ class DepartmentControllerTest {
                 .thenReturn(List.of(department, department2));
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.get("/subarea"))
+                .perform(MockMvcRequestBuilders.get("/department"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
@@ -63,7 +63,7 @@ class DepartmentControllerTest {
                 .thenReturn(department);
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.get("/subarea/{id}", 100L))
+                .perform(MockMvcRequestBuilders.get("/department/{id}", 100L))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(100L))
@@ -76,7 +76,7 @@ class DepartmentControllerTest {
                 .thenReturn(department);
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.post("/subarea")
+                .perform(MockMvcRequestBuilders.post("/department")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(new ObjectMapper().writeValueAsString(department))))
                 .andDo(print())
@@ -93,7 +93,7 @@ class DepartmentControllerTest {
                 .thenReturn(department);
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.put("/subarea")
+                .perform(MockMvcRequestBuilders.put("/department")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(new ObjectMapper().writeValueAsString(department))))
                 .andDo(print())
@@ -109,7 +109,7 @@ class DepartmentControllerTest {
         when(service.save(any()))
                 .thenReturn(department);
 
-        this.mockMvc.perform(delete("/subarea/{id}", 100L)
+        this.mockMvc.perform(delete("/department/{id}", 100L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())

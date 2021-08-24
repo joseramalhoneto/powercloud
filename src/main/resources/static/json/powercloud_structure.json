@@ -3,7 +3,7 @@
 		"name": "CRM & Service",
 		"description": "A technology for managing all your company's relationships and interactions with customers",
 		"color": "orange",
-		"subareas": [
+		"departments": [
 			{ "name": "Customer Self Service", "revenue": 50000, "employees": 25 },
 			{ "name": "Price Adjustments", "revenue": 40000, "employees": 8 },
 			{ "name": "360 Agent View", "revenue": 10000, "employees": 10  },
@@ -17,7 +17,7 @@
 		"name": "MDM/EDM",
 		"description": "The highest security standard for managing mobile",
 		"color": "light_blue",
-		"subareas": [
+		"departments": [
 			{ "name": "B2C, B2B, Smart Meters", "revenue": 10000, "employees": 13 },
 			{ "name": "Validation & Estimation", "revenue": 13000, "employees": 17 },
 			{ "name": "Agregation & Disagregation", "revenue": 20000, "employees": 9 },

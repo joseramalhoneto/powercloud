@@ -11,7 +11,7 @@ import powercloud.service.DepartmentService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/subarea")
+@RequestMapping("/department")
 public class DepartmentController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

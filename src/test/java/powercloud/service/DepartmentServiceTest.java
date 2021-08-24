@@ -7,7 +7,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import powercloud.exception.DepartmentException;
+import powercloud.exception.DepartmentInvalidException;
 import powercloud.exception.DepartmentNotFoundException;
 import powercloud.model.Department;
 import powercloud.repository.DepartmentRepository;
@@ -33,8 +33,8 @@ class DepartmentServiceTest {
     @BeforeEach
     void setUp() {
         service = new DepartmentService(repository);
-        department1 = new Department(100L, "name_subarea_test_1", 10000, 5 );
-        department2 = new Department(200L, "name_subarea_test_2", 15000, 9 );
+        department1 = new Department(100L, "name_department_test_1", 10000, 5 );
+        department2 = new Department(200L, "name_department_test_2", 15000, 9 );
     }
 
     @Test
@@ -86,50 +86,50 @@ class DepartmentServiceTest {
     }
 
     @Test
-    void whenSubAreaIsNull() {
+    void whenDepartmentIsNull() {
         department1 = null;
-        Exception exception = assertThrows(DepartmentException.class, () -> service.save(department1));
+        Exception exception = assertThrows(DepartmentInvalidException.class, () -> service.save(department1));
 
-        String expectedMessage = "SubArea invalid.";
+        String expectedMessage = "Department invalid.";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
-    void whenSubAreaNameIsInvalid() {
+    void whenDepartmentNameIsInvalid() {
         department1 = new Department(100L, "", 10000, 5 );
-        Exception exception = assertThrows(DepartmentException.class, () -> service.save(department1));
+        Exception exception = assertThrows(DepartmentInvalidException.class, () -> service.save(department1));
 
-        String expectedMessage = "SubArea invalid.";
+        String expectedMessage = "Department invalid.";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
-    void whenSubAreaEmployeesIsInvalid() {
-        department1 = new Department(100L, "name_subarea_test_1", 10000, -99 );
-        Exception exception = assertThrows(DepartmentException.class, () -> service.save(department1));
+    void whenDepartmentEmployeesIsInvalid() {
+        department1 = new Department(100L, "name_department_test_1", 10000, -99 );
+        Exception exception = assertThrows(DepartmentInvalidException.class, () -> service.save(department1));
 
-        String expectedMessage = "Area invalid.";
+        String expectedMessage = "Department invalid.";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
-    void updateSubAreaIdDoesNotExist() {
-        department1 = new Department(999L, "name_subarea_test_1", 10000, 5 );
+    void updateDepartmentIdDoesNotExist() {
+        department1 = new Department(999L, "name_department_test_1", 10000, 5 );
         Exception exception = assertThrows(DepartmentNotFoundException.class, () -> service.update(department1));
 
-        String expectedMessage = "Area not found.";
+        String expectedMessage = "Department not found.";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
-    void deleteSubAreaIdDoesNotExist() {
+    void deleteDepartmentIdDoesNotExist() {
         Exception exception = assertThrows(DepartmentNotFoundException.class, () -> service.deleteById(999L));
 
-        String expectedMessage = "Area not found.";
+        String expectedMessage = "Department not found.";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }

@@ -5,11 +5,8 @@ import powercloud.model.Area;
 public class AreaUtility {
 
     public static boolean isAreaValid(Area area){       //verify if all data was informed
-        if(area == null)
-            return false;
-
-        if(area.getId() == null ||
-                area.getId() < 1 ||
+        if(area == null ||
+                area.getId() == null ||
                 area.getName().equals("") ||
                 area.getDescription().equals("") ||
                 area.getColor().equals(""))
