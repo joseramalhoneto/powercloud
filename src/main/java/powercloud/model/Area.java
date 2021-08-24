@@ -23,7 +23,7 @@ public class Area {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "area_id")
-    private List<SubArea> subareas;
+    private List<Department> subareas;
 
     public Area(Long id, String name, String description, String color) {
         this.id = id;

@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NO_CONTENT)
-public class SubAreaInvalidException extends RuntimeException {
-    public SubAreaInvalidException(String message) {
+public class DepartmentException extends RuntimeException {
+    public DepartmentException(String message) {
         super(message);
     }
 }

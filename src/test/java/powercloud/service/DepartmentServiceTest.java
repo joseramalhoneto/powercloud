@@ -7,14 +7,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import powercloud.exception.AreaInvalidException;
-import powercloud.exception.AreaNotFoundException;
-import powercloud.exception.SubAreaInvalidException;
-import powercloud.exception.SubAreaNotFoundException;
-import powercloud.model.Area;
-import powercloud.model.SubArea;
-import powercloud.repository.AreaRepository;
-import powercloud.repository.SubAreaRepository;
+import powercloud.exception.DepartmentException;
+import powercloud.exception.DepartmentNotFoundException;
+import powercloud.model.Department;
+import powercloud.repository.DepartmentRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,36 +22,36 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-class SubAreaServiceTest {
+class DepartmentServiceTest {
 
-    private SubArea subArea1, subArea2;
+    private Department department1, department2;
 
     @Mock
-    private SubAreaRepository repository;
-    private SubAreaService service;
+    private DepartmentRepository repository;
+    private DepartmentService service;
 
     @BeforeEach
     void setUp() {
-        service = new SubAreaService(repository);
-        subArea1 = new SubArea(100L, "name_subarea_test_1", 10000, 5 );
-        subArea2 = new SubArea(200L, "name_subarea_test_2", 15000, 9 );
+        service = new DepartmentService(repository);
+        department1 = new Department(100L, "name_subarea_test_1", 10000, 5 );
+        department2 = new Department(200L, "name_subarea_test_2", 15000, 9 );
     }
 
     @Test
     void findById() {
-        when(repository.findById(100L)).thenReturn(Optional.of(subArea1));
-        assertThat(service.findById(100L)).isEqualTo(subArea1);
+        when(repository.findById(100L)).thenReturn(Optional.of(department1));
+        assertThat(service.findById(100L)).isEqualTo(department1);
     }
 
     @Test
     void save() {
-        service.save(subArea1);
+        service.save(department1);
 
-        ArgumentCaptor<SubArea> argumentCaptor = ArgumentCaptor.forClass(SubArea.class);
+        ArgumentCaptor<Department> argumentCaptor = ArgumentCaptor.forClass(Department.class);
         verify(repository).save(argumentCaptor.capture());
-        SubArea result = argumentCaptor.getValue();
+        Department result = argumentCaptor.getValue();
 
-        assertThat(result).isEqualTo(subArea1);
+        assertThat(result).isEqualTo(department1);
     }
 
     @Test
@@ -64,18 +60,18 @@ class SubAreaServiceTest {
 
     @Test
     void saveAll() {
-        service.saveAll(List.of(subArea1, subArea2));
+        service.saveAll(List.of(department1, department2));
 
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
         verify(repository).saveAll(argumentCaptor.capture());
         List result = argumentCaptor.getValue();
 
-        assertThat(result).isEqualTo(List.of(subArea1, subArea2));
+        assertThat(result).isEqualTo(List.of(department1, department2));
     }
 
     @Test
     void deleteAll() {
-        service.saveAll(List.of(subArea1, subArea2));
+        service.saveAll(List.of(department1, department2));
 
         service.deleteAll();
         boolean exists = repository.existsById(100L);
@@ -91,8 +87,8 @@ class SubAreaServiceTest {
 
     @Test
     void whenSubAreaIsNull() {
-        subArea1  = null;
-        Exception exception = assertThrows(SubAreaInvalidException.class, () -> service.save(subArea1));
+        department1 = null;
+        Exception exception = assertThrows(DepartmentException.class, () -> service.save(department1));
 
         String expectedMessage = "SubArea invalid.";
         String actualMessage = exception.getMessage();
@@ -101,8 +97,8 @@ class SubAreaServiceTest {
 
     @Test
     void whenSubAreaNameIsInvalid() {
-        subArea1 = new SubArea(100L, "", 10000, 5 );
-        Exception exception = assertThrows(SubAreaInvalidException.class, () -> service.save(subArea1));
+        department1 = new Department(100L, "", 10000, 5 );
+        Exception exception = assertThrows(DepartmentException.class, () -> service.save(department1));
 
         String expectedMessage = "SubArea invalid.";
         String actualMessage = exception.getMessage();
@@ -111,8 +107,8 @@ class SubAreaServiceTest {
 
     @Test
     void whenSubAreaEmployeesIsInvalid() {
-        subArea1 = new SubArea(100L, "name_subarea_test_1", 10000, -99 );
-        Exception exception = assertThrows(SubAreaInvalidException.class, () -> service.save(subArea1));
+        department1 = new Department(100L, "name_subarea_test_1", 10000, -99 );
+        Exception exception = assertThrows(DepartmentException.class, () -> service.save(department1));
 
         String expectedMessage = "Area invalid.";
         String actualMessage = exception.getMessage();
@@ -121,8 +117,8 @@ class SubAreaServiceTest {
 
     @Test
     void updateSubAreaIdDoesNotExist() {
-        subArea1 = new SubArea(999L, "name_subarea_test_1", 10000, 5 );
-        Exception exception = assertThrows(SubAreaNotFoundException.class, () -> service.update(subArea1));
+        department1 = new Department(999L, "name_subarea_test_1", 10000, 5 );
+        Exception exception = assertThrows(DepartmentNotFoundException.class, () -> service.update(department1));
 
         String expectedMessage = "Area not found.";
         String actualMessage = exception.getMessage();
@@ -131,7 +127,7 @@ class SubAreaServiceTest {
 
     @Test
     void deleteSubAreaIdDoesNotExist() {
-        Exception exception = assertThrows(SubAreaNotFoundException.class, () -> service.deleteById(999L));
+        Exception exception = assertThrows(DepartmentNotFoundException.class, () -> service.deleteById(999L));
 
         String expectedMessage = "Area not found.";
         String actualMessage = exception.getMessage();

@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class SubArea {
+public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

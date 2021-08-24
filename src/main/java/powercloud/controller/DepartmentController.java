@@ -5,49 +5,49 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import powercloud.model.SubArea;
-import powercloud.service.SubAreaService;
+import powercloud.model.Department;
+import powercloud.service.DepartmentService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/subarea")
-public class SubAreaController {
+public class DepartmentController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final SubAreaService service;
+    private final DepartmentService service;
 
     @Autowired
-    public SubAreaController(SubAreaService subAreaService) {
-        this.service = subAreaService;
+    public DepartmentController(DepartmentService departmentService) {
+        this.service = departmentService;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<SubArea> findAll() {
+    public List<Department> findAll() {
         logger.info("@GetMapping/findAll");
         return service.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public SubArea findById(@PathVariable Long id) {
+    public Department findById(@PathVariable Long id) {
         logger.info("@GetMapping/findById");
         return service.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SubArea save(@RequestBody SubArea subArea) {
+    public Department save(@RequestBody Department department) {
         logger.info("@GetMapping/save");
-        return service.save(subArea);
+        return service.save(department);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public SubArea update(@RequestBody SubArea subArea){
+    public Department update(@RequestBody Department department){
         logger.info("@GetMapping/update");
-        return service.update(subArea);
+        return service.update(department);
     }
 
     @DeleteMapping("/{id}")
@@ -59,14 +59,14 @@ public class SubAreaController {
 
     @GetMapping("/maxRevenue")
     @ResponseStatus(HttpStatus.OK)
-    public SubArea getMaxRevenue(){
+    public Department getMaxRevenue(){
         logger.info("@GetMapping/maxRevenue");
         return service.getMaxRevenue();
     }
 
     @GetMapping("/minRevenue")
     @ResponseStatus(HttpStatus.OK)
-    public SubArea getMinRevenue(){
+    public Department getMinRevenue(){
         logger.info("@GetMapping/minRevenue");
         return service.getMinRevenue();
     }

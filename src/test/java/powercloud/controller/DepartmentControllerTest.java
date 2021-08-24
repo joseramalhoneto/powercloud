@@ -11,8 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import powercloud.model.SubArea;
-import powercloud.service.SubAreaService;
+import powercloud.model.Department;
+import powercloud.service.DepartmentService;
 
 import java.util.List;
 
@@ -24,28 +24,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(SubAreaController.class)
-class SubAreaControllerTest {
+@WebMvcTest(DepartmentController.class)
+class DepartmentControllerTest {
 
-    private SubArea subArea, subArea2;
+    private Department department, department2;
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private SubAreaService service;
+    private DepartmentService service;
 
     @BeforeEach
     void setUp() {
-        this.subArea =  new SubArea(100L, "Contact Manager Test 1", 9000, 14);
-        this.subArea2 = new SubArea(200L, "Contact Manager Test 2", 16000, 5);
+        this.department =  new Department(100L, "Contact Manager Test 1", 9000, 14);
+        this.department2 = new Department(200L, "Contact Manager Test 2", 16000, 5);
     }
 
     @Test
     void findAll() throws Exception {
         when(service
                 .findAll())
-                .thenReturn(List.of(subArea, subArea2));
+                .thenReturn(List.of(department, department2));
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get("/subarea"))
@@ -60,7 +60,7 @@ class SubAreaControllerTest {
     void findById() throws Exception {
         when(service
                 .findById(100L))
-                .thenReturn(subArea);
+                .thenReturn(department);
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get("/subarea/{id}", 100L))
@@ -73,12 +73,12 @@ class SubAreaControllerTest {
     @Test
     void save() throws Exception {
         when(service.save(any()))
-                .thenReturn(subArea);
+                .thenReturn(department);
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.post("/subarea")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(String.valueOf(new ObjectMapper().writeValueAsString(subArea))))
+                        .content(String.valueOf(new ObjectMapper().writeValueAsString(department))))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(100L))
@@ -90,12 +90,12 @@ class SubAreaControllerTest {
     @Test
     void update()  throws Exception {
         when(service.update(any()))
-                .thenReturn(subArea);
+                .thenReturn(department);
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.put("/subarea")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(String.valueOf(new ObjectMapper().writeValueAsString(subArea))))
+                        .content(String.valueOf(new ObjectMapper().writeValueAsString(department))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(100L))
@@ -107,7 +107,7 @@ class SubAreaControllerTest {
     @Test
     void deleteById()   throws Exception {
         when(service.save(any()))
-                .thenReturn(subArea);
+                .thenReturn(department);
 
         this.mockMvc.perform(delete("/subarea/{id}", 100L)
                 .contentType(MediaType.APPLICATION_JSON)
