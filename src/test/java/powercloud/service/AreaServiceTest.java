@@ -10,6 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import powercloud.exception.AreaInvalidException;
 import powercloud.exception.AreaNotFoundException;
 import powercloud.model.Area;
+import powercloud.model.Department;
 import powercloud.repository.AreaRepository;
 
 import java.util.List;
@@ -32,8 +33,8 @@ class AreaServiceTest {
     @BeforeEach
     void setUp() {
         service = new AreaService(repository);
-        area  = new Area(100L, "name_area_test", "description_test", "color_test");
-        area2 = new Area(200L, "name_area_test", "description_test", "color_test");
+        area  = new Area(100L, "name_area_test", "description_test", "Berlin", "color_test");
+        area2 = new Area(200L, "name_area_test", "description_test", "Berlin","color_test");
     }
 
     @Test
@@ -70,7 +71,7 @@ class AreaServiceTest {
 
     @Test
     void whenAreaNameIsInvalid() {
-        area  = new Area(100L, "", "description_test", "color_test");
+        area  = new Area(100L, "", "description_test", "Berlin", "color_test");
         Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
 
         String expectedMessage = "Area invalid.";
@@ -80,7 +81,7 @@ class AreaServiceTest {
 
     @Test
     void whenAreaDescriptionIsInvalid() {
-        area  = new Area(100L, "name_area_test", "", "color_test");
+        area  = new Area(100L, "name_area_test", "","Berlin", "color_test");
         Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
 
         String expectedMessage = "Area invalid.";
@@ -90,7 +91,17 @@ class AreaServiceTest {
 
     @Test
     void whenAreaColorIsInvalid() {
-        area  = new Area(100L, "name_area_test", "description_test", "");
+        area  = new Area(100L, "name_area_test", "description_test", "Berlin","");
+        Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
+
+        String expectedMessage = "Area invalid.";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void whenAreaLocationIsInvalid() {
+        area  = new Area(100L, "name_area_test", "description_test", "","color_test");
         Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
 
         String expectedMessage = "Area invalid.";
@@ -100,7 +111,7 @@ class AreaServiceTest {
 
     @Test
     void updateAreaIdDoesNotExist() {
-        area  = new Area(999L, "name_area_test", "description_test", "color_test");
+        area  = new Area(999L, "name_area_test", "description_test", "Berlin","color_test");
         Exception exception = assertThrows(AreaNotFoundException.class, () -> service.update(area));
 
         String expectedMessage = "Area not found.";
@@ -135,8 +146,8 @@ class AreaServiceTest {
     @Test
     void deleteAll() {
         service.saveAll(List.of(area, area2));
-
         service.deleteAll();
+
         boolean exists = repository.existsById(100L);
         assertFalse(exists);
 
@@ -146,5 +157,16 @@ class AreaServiceTest {
 
     @Test
     void deleteById() {}
+
+    @Test
+    void getRevenueById(){
+//        Department department = new Department(300L, "Contact Manager Test 1", 4000, 14);
+//        Department department2 = new Department(400L, "Contact Manager Test 2", 16000, 5);
+//        area.setDepartments(List.of(department, department2));
+//        service.save(area);
+//
+//        when(repository.getRevenueById(100L)).thenReturn(20000.0);
+//        assertThat(service.getRevenueById(100L)).isEqualTo(20000.0);
+    }
 
 }

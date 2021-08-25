@@ -9,6 +9,7 @@ public class AreaUtility {
                 area.getId() == null ||
                 area.getName().equals("") ||
                 area.getDescription().equals("") ||
+                area.getLocation().equals("") ||
                 area.getColor().equals(""))
             return false;
 

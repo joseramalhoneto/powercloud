@@ -20,16 +20,18 @@ public class Area {
     private Long id;
     private String name;
     private String description;
+    private String location;
     private String color;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "area_id")
     private List<Department> departments;
 
-    public Area(Long id, String name, String description, String color) {
+    public Area(Long id, String name, String description, String location, String color) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.location = location;
         this.color = color;
     }
 }

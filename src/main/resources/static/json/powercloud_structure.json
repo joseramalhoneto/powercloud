@@ -2,6 +2,7 @@
 	{
 		"name": "CRM & Service",
 		"description": "A technology for managing all your company's relationships and interactions with customers",
+		"location" : "Leipzig",
 		"color": "orange",
 		"departments": [
 			{ "name": "Customer Self Service", "revenue": 50000.00, "employees": 25 },
@@ -16,6 +17,7 @@
 	{
 		"name": "MDM/EDM",
 		"description": "The highest security standard for managing mobile",
+		"location" : "Offenburg",
 		"color": "light_blue",
 		"departments": [
 			{ "name": "B2C, B2B, Smart Meters", "revenue": 10000.00, "employees": 13 },
@@ -28,16 +30,17 @@
 	{
 		"name": "Billing",
 		"description": "Responsible for keeping track of money owed to us by customers",
+		"location" : "Berlin",
 		"color": "light_green",
 		"departments": [
 			{ "name": "Regulatory Compliance", "revenue": 9000.00, "employees": 9 },
 			{ "name": "Billing Validation", "revenue": 20000.00, "employees": 9 },
 			{ "name": "Commodity", "revenue": 19000.00, "employees": 14, "sectors": [
-																					{ "name": "Electricity"},
-																					{ "name": "Gas"},
-																					{ "name": "Heat"},
-																					{ "name": "Water"},
-																					{ "name": "Sewage"}
+					{ "name": "Electricity"},
+					{ "name": "Gas"},
+					{ "name": "Heat"},
+					{ "name": "Water"},
+					{ "name": "Sewage"}
 			]}
 		]
 	}

@@ -68,6 +68,9 @@ public class AreaService {
     }
 
     public double getRevenueById(Long id) {
+        if(!repository.existsById(id))
+            throw new AreaNotFoundException("Area not found.");
+
         return repository.getRevenueById(id);
     }
 

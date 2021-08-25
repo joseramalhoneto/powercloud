@@ -40,8 +40,8 @@ class AreaControllerTest {
 
     @BeforeEach
     void setUp() {
-        area  = new Area(100L, "name_area_test", "description_test", "color_test");
-        area2 = new Area(200L, "name_area_test", "description_test", "color_test");
+        area  = new Area(100L, "name_area_test", "description_test","Berlin","color_test");
+        area2 = new Area(200L, "name_area_test", "description_test","Berlin","color_test");
     }
 
     @Test
