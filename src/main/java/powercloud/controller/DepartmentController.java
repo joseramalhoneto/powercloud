@@ -57,6 +57,13 @@ public class DepartmentController {
         service.deleteById(id);
     }
 
+    @GetMapping("/revenue/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public double getRevenueByDepartment(@PathVariable Long id){
+        logger.info("@GetMapping/getRevenueByDepartment");
+        return service.getRevenueByDepartment(id);
+    }
+
     @GetMapping("/maxRevenue")
     @ResponseStatus(HttpStatus.OK)
     public Department getMaxRevenue(){

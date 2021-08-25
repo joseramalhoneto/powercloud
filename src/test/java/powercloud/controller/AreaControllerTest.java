@@ -12,11 +12,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import powercloud.model.Area;
+import powercloud.model.Department;
 import powercloud.service.AreaService;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -72,17 +74,17 @@ class AreaControllerTest {
     }
 
     @Test
-    void findByIdInvalid() throws Exception {
+    void findByIdInvalid() {
 
     }
 
     @Test
-    void findByIdNotFound() throws Exception {
+    void findByIdNotFound(){
         service.save(area);
 
         service.deleteById(area.getId());
         Area areaResult = service.findById(100L);
-        assertEquals(null, areaResult);
+        assertNull(areaResult);
     }
 
     @Test
@@ -128,5 +130,41 @@ class AreaControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void getRevenueById() throws Exception {
+        Department department = new Department(200L, "Contact Manager Test 1", 4000, 14);
+        Department department2 = new Department(300L, "Contact Manager Test 2", 16000, 5);
+        area.setDepartments(List.of(department, department2));
+
+        when(service.getRevenueById(100L))
+                .thenReturn(20000.0);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/area/revenue/{id}", 100L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getDepartmentsById() throws Exception {
+        Department department = new Department(200L, "Contact Manager Test 1", 4000, 14);
+        Department department2 = new Department(300L, "Contact Manager Test 2", 16000, 5);
+        area.setDepartments(List.of(department, department2));
+
+        when(service.getDepartmentsById(100L))
+                .thenReturn(List.of(department, department2));
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/area/departments/{id}", 100L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+
 
 }

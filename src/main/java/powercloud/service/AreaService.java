@@ -13,6 +13,7 @@ import powercloud.utility.AreaUtility;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,16 +67,28 @@ public class AreaService {
         repository.deleteById(id);
     }
 
+    public double getRevenueById(Long id) {
+        return repository.getRevenueById(id);
+    }
+
+    public List<Department> getDepartmentsById(Long id) {
+        if(!repository.existsById(id))
+            throw new AreaNotFoundException("Area not found.");
+
+        Optional<Area> first = repository.findAll()
+                                    .stream()
+                                    .filter(area -> area.getId().equals(id))
+                                    .findAny();
+
+        return first.get().getDepartments();
+    }
+
     public Area getMaxRevenue() {
-        List<Area> areas = repository.findAll();
-//        areas.stream()
-//               .collect(Collectors.groupingBy(Area::getDepartments, Collectors.maxBy(Comparator.comparing())));
-
-
-        return null;
+        return repository.getMaxRevenue();
     }
 
     public Area getMinRevenue() {
         return null;
     }
+
 }

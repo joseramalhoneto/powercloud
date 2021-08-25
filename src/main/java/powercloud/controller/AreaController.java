@@ -2,8 +2,10 @@ package powercloud.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import powercloud.model.Area;
+import powercloud.model.Department;
 import powercloud.service.AreaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +56,20 @@ public class AreaController {
     public void deleteById(@PathVariable Long id){
         logger.info("@GetMapping/deleteById");
         service.deleteById(id);
+    }
+
+    @GetMapping("/revenue/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public double getRevenueById(@PathVariable Long id){
+        logger.info("@GetMapping/getRevenueById");
+        return service.getRevenueById(id);
+    }
+
+    @GetMapping("/departments/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Department> getDepartmentsById(@PathVariable Long id){
+        logger.info("@GetMapping/getDepartmentsById");
+        return service.getDepartmentsById(id);
     }
 
     @GetMapping("/maxRevenue")

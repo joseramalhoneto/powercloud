@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "area")
 public class Area {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
