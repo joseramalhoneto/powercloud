@@ -10,11 +10,9 @@ import powercloud.model.Department;
 import powercloud.repository.AreaRepository;
 import powercloud.utility.AreaUtility;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AreaService {
@@ -90,11 +88,14 @@ public class AreaService {
     }
 
     public Area getMaxRevenue() {
-        return repository.getMaxRevenue();
-    }
+        Map<?, ?> maxRevenue = repository.getMaxRevenue();
+        Optional<Area> areaMaxRevenue = repository.
+                findById(Long.parseLong(maxRevenue.get("area_id").toString()));
 
-    public Area getMinRevenue() {
-        return null;
+        if(areaMaxRevenue.isEmpty())
+            return null;
+
+        return areaMaxRevenue.get();
     }
 
 }

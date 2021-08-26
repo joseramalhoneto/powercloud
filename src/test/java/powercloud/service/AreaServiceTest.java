@@ -1,13 +1,11 @@
 package powercloud.service;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import powercloud.exception.AreaInvalidException;
@@ -136,7 +134,7 @@ class AreaServiceTest {
     }
 
     @Test
-    void whenAreaIsNull() {
+    void saveAreaNull() {
         area  = null;
         Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
 
@@ -146,7 +144,7 @@ class AreaServiceTest {
     }
 
     @Test
-    void whenAreaNameIsInvalid() {
+    void saveAreaNameInvalid() {
         area  = new Area(100L, "", "description_test", "Berlin", "color_test");
         Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
 
@@ -156,7 +154,7 @@ class AreaServiceTest {
     }
 
     @Test
-    void whenAreaDescriptionIsInvalid() {
+    void saveAreaDescriptionInvalid() {
         area  = new Area(100L, "name_area_test", "","Berlin", "color_test");
         Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
 
@@ -166,7 +164,7 @@ class AreaServiceTest {
     }
 
     @Test
-    void whenAreaColorIsInvalid() {
+    void saveAreaColorInvalid() {
         area  = new Area(100L, "name_area_test", "description_test", "Berlin","");
         Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
 
@@ -176,7 +174,7 @@ class AreaServiceTest {
     }
 
     @Test
-    void whenAreaLocationIsInvalid() {
+    void saveAreaLocationInvalid() {
         area  = new Area(100L, "name_area_test", "description_test", "","color_test");
         Exception exception = assertThrows(AreaInvalidException.class, () -> service.save(area));
 
@@ -215,14 +213,51 @@ class AreaServiceTest {
     }
 
     @Test
+    void findByIdNull() {
+        Exception exception = assertThrows(AreaNotFoundException.class, () -> service.findById(null));
+
+        String expectedMessage = "Area not found.";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void findByIdNotFound() {
+        Exception exception = assertThrows(AreaNotFoundException.class, () -> service.findById(999L));
+
+        String expectedMessage = "Area not found.";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
     void getRevenueById(){
-//        Department department = new Department(300L, "Contact Manager Test 1", 4000, 14);
-//        Department department2 = new Department(400L, "Contact Manager Test 2", 16000, 5);
-//        area.setDepartments(List.of(department, department2));
-//        service.save(area);
-//
-//        when(repository.getRevenueById(100L)).thenReturn(20000.0);
-//        assertThat(service.getRevenueById(100L)).isEqualTo(20000.0);
+        when(repository.existsById(any())).thenReturn(true);
+        when(repository.save(area)).thenReturn(area);
+
+        Department department1 = new Department(300L, "Contact Manager Test 1", 4000, 14);
+        Department department2 = new Department(400L, "Contact Manager Test 2", 16000, 5);
+        area.setDepartments(List.of(department1, department2));
+        service.save(area);
+
+        when(repository.getRevenueById(area.getId())).thenReturn(20000.0);
+        double revenue = service.getRevenueById(area.getId());
+        assertThat(revenue).isEqualTo(20000.0);
+    }
+
+    @Test
+    void getDepartmentsById(){
+        Department department1 = new Department(300L, "Contact Manager Test 1", 4000, 14);
+        Department department2 = new Department(400L, "Contact Manager Test 2", 16000, 5);
+        area.setDepartments(List.of(department1, department2));
+
+        when(repository.existsById(any())).thenReturn(true);
+        when(repository.findAll()).thenReturn(List.of(area));
+        when(repository.save(area)).thenReturn(area);
+        service.save(area);
+
+        List<Department> departments = service.getDepartmentsById(area.getId());
+        assertThat(departments).isEqualTo(List.of(department1, department2));
     }
 
 }

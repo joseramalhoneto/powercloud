@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import powercloud.exception.DepartmentInvalidException;
 import powercloud.exception.DepartmentNotFoundException;
-import powercloud.model.Area;
 import powercloud.model.Department;
 import powercloud.repository.DepartmentRepository;
 
@@ -39,6 +38,15 @@ class DepartmentServiceTest {
         service = new DepartmentService(repository);
         department1 = new Department(100L, "name_department_test_1", 10000, 5 );
         department2 = new Department(200L, "name_department_test_2", 15000, 9 );
+    }
+
+    @Test
+    void findAll() {
+        when(repository.findAll()).thenReturn(List.of(department1, department2));
+        List<Department> result = service.findAll();
+
+        assertThat(result).isEqualTo(List.of(department1, department2));
+        assertEquals(2, result.size());
     }
 
     @Test
@@ -156,6 +164,18 @@ class DepartmentServiceTest {
         String expectedMessage = "Department not found.";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void getRevenueByDepartment() {
+        when(repository.save(department1)).thenReturn(department1);
+        when(service.getRevenueByDepartment(department1.getId())).thenReturn(10000.0);
+        Department departmentSaved = service.save(department1);
+
+        double revenue = service.getRevenueByDepartment(departmentSaved.getId());
+
+        assertEquals(revenue, departmentSaved.getRevenue());
+        verify(repository, times(1)).getRevenueByDepartment(departmentSaved.getId());
     }
 
 }

@@ -1,14 +1,14 @@
 package powercloud.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import powercloud.model.Area;
 import powercloud.model.Department;
 import powercloud.service.AreaService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 @RestController
@@ -77,13 +77,6 @@ public class AreaController {
     public Area getMaxRevenue(){
         logger.info("@GetMapping/maxRevenue");
         return service.getMaxRevenue();
-    }
-
-    @GetMapping("/minRevenue")
-    @ResponseStatus(HttpStatus.OK)
-    public Area getMinRevenue(){
-        logger.info("@GetMapping/minRevenue");
-        return service.getMinRevenue();
     }
 
 }

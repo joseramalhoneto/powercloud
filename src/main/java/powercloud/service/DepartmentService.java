@@ -70,15 +70,19 @@ public class DepartmentService {
 
     public Department getMaxRevenue() {
         List<Department> departments = repository.findAll();
-        Optional<Department> department = departments.stream()
-                                                        .max(Comparator.comparing(Department::getRevenue));
+        Optional<Department> department =
+                departments
+                        .stream()
+                        .max(Comparator.comparing(Department::getRevenue));
         return department.get();
     }
 
     public Department getMinRevenue() {
         List<Department> departments = repository.findAll();
-        Optional<Department> department = departments.stream()
-                                                        .min(Comparator.comparing(Department::getRevenue));
+        Optional<Department> department =
+                departments
+                        .stream()
+                        .min(Comparator.comparing(Department::getRevenue));
         return department.get();
     }
 
