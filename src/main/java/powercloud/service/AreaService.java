@@ -48,6 +48,9 @@ public class AreaService {
         if(!repository.existsById(area.getId()))
             throw new AreaNotFoundException("Area not found.");
 
+        if(!AreaUtility.isAreaValid(area))
+            throw new AreaInvalidException("Area invalid.");
+
         return repository.save(area);
     }
 

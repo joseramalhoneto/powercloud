@@ -4,11 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import powercloud.exception.DepartmentInvalidException;
 import powercloud.exception.DepartmentNotFoundException;
+import powercloud.model.Area;
 import powercloud.model.Department;
 import powercloud.repository.DepartmentRepository;
 
@@ -17,8 +19,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -26,9 +28,11 @@ class DepartmentServiceTest {
 
     private Department department1, department2;
 
+    @InjectMocks
+    private DepartmentService service;
+
     @Mock
     private DepartmentRepository repository;
-    private DepartmentService service;
 
     @BeforeEach
     void setUp() {
@@ -56,6 +60,17 @@ class DepartmentServiceTest {
 
     @Test
     void update() {
+        department1 = new Department(100L, "name_department_test_X", 5000, 9 );
+
+        when(repository.existsById(any())).thenReturn(true);
+        when(repository.save(department1)).thenReturn(department1);
+        Department departmentUpdated = service.update(department1);
+
+        assertEquals(100L, departmentUpdated.getId());
+        assertEquals("name_department_test_X", departmentUpdated.getName());
+        assertEquals(5000, departmentUpdated.getRevenue());
+        assertEquals(9, departmentUpdated.getEmployees());
+        verify(repository, times(1)).save(department1);
     }
 
     @Test
@@ -83,6 +98,15 @@ class DepartmentServiceTest {
 
     @Test
     void deleteById() {
+        when(repository.existsById(any())).thenReturn(true);
+        when(repository.save(department1)).thenReturn(department1);
+
+        Department departmentSaved = service.save(department1);
+        service.deleteById(departmentSaved.getId());
+
+        Optional<Department> result = repository.findById(departmentSaved.getId());
+        assertFalse(result.isPresent());
+        verify(repository, times(1)).deleteById(departmentSaved.getId());
     }
 
     @Test
