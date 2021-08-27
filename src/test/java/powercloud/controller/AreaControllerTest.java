@@ -73,20 +73,6 @@ class AreaControllerTest {
     }
 
     @Test
-    void findByIdInvalid() {
-
-    }
-
-    @Test
-    void findByIdNotFound(){
-        service.save(area);
-
-        service.deleteById(area.getId());
-        Area areaResult = service.findById(100L);
-        assertNull(areaResult);
-    }
-
-    @Test
     void save() throws Exception {
         when(service.save(any()))
                 .thenReturn(area);
